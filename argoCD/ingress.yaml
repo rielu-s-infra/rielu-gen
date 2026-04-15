@@ -29,7 +29,7 @@ spec:
       priority: 1
       middlewares:
         - name: redirect-to-www
-          namespace: riellu-site
+          namespace: rielu-site
       services:
         - kind: Service
           name: rielu-site
@@ -54,7 +54,7 @@ spec:
       priority: 1
       middlewares:
         - name: redirect-to-www
-          namespace: riellu-site
+          namespace: rielu-site
       services:
         - kind: Service
           name: rielu-site
