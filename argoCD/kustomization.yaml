@@ -4,8 +4,6 @@ resources:
   - deployment.yaml
   - service.yaml
   - ingress.yaml
-  - registry.yaml
-  - env.yaml
   - imageUpdater.yaml
   - hpa.yaml
 labels:
