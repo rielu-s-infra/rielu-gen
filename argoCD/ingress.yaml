@@ -1,17 +1,4 @@
 apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: redirect-to-www
-  namespace: rielu-site
-spec:
-  redirectRegex:
-    # httpでもhttpsでもrielu.uniproject.jpに来たら
-    regex: ^https?://rielu.uniproject\.jp/(.*)
-    # www付きに飛ばす
-    replacement: https://rielu.uniproject.jp/${1}
-    permanent: true
----
-apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: rielu-site
@@ -21,40 +8,12 @@ spec:
     - web
   routes:
     - kind: Rule
-      match: Host(`www.rielu.uniproject.jp`) && PathPrefix(`/`)
-      observability:
-        accessLogs: true
-        metrics: true
-        tracing: true
-      priority: 1
-      middlewares:
-        - name: redirect-to-www
-          namespace: rielu-site
-      services:
-        - kind: Service
-          name: rielu-site
-          passHostHeader: true
-          port: 80
-          responseForwarding:
-            flushInterval: 1ms
-          scheme: http
-          sticky:
-            cookie:
-              httpOnly: true
-              name: cookie
-              secure: true
-          strategy: wrr
-          weight: 10
-    - kind: Rule
       match: Host(`rielu.uniproject.jp`) && PathPrefix(`/`)
       observability:
         accessLogs: true
         metrics: true
         tracing: true
       priority: 1
-      middlewares:
-        - name: redirect-to-www
-          namespace: rielu-site
       services:
         - kind: Service
           name: rielu-site
@@ -71,7 +30,6 @@ spec:
           strategy: wrr
           weight: 10
   tls:
-    certResolver: myresolver
+    certResolver: cf-prod
     domains:
       - main: rielu.uniproject.jp
-      - main: www.rielu.uniproject.jp
