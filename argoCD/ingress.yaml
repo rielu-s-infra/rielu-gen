@@ -20,15 +20,12 @@ spec:
           passHostHeader: true
           port: 3000
           responseForwarding:
-            flushInterval: 1ms
-          scheme: http
+          
           sticky:
             cookie:
               httpOnly: true
               name: cookie
               secure: true
-          strategy: wrr
-          weight: 10
   tls:
     certResolver: cf-prod
     domains:
