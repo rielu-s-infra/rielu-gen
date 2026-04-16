@@ -4,7 +4,7 @@ metadata:
   name: rielu-site
   namespace: rielu-site
   annotations:
-    cert-manager.io/cluster-issuer: cf-prod
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: public
   rules:
