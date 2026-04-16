@@ -20,5 +20,5 @@ spec:
                   number: 3000
   tls:
     - hosts:
-        - rielu.uniproject.jp
-      secretName: rielu-uniproject-jp-tls
+        - rieluofficial.uniproject.jp
+      secretName: rieluofficial-uniproject-jp-tls
