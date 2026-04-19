@@ -1,22 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rielu-links
+  name: rielu-gen
   namespace: argocd
   annotations:
     # Image Updaterの設定（注釈として記述）
-    argocd-image-updater.argoproj.io/image-list: rielu-links=docker.io/rieluinfra/rielu-links
-    argocd-image-updater.argoproj.io/rielu-links.update-strategy: latest
+    argocd-image-updater.argoproj.io/image-list: rielu-gen=docker.io/rieluinfra/rielu-gen
+    argocd-image-updater.argoproj.io/rielu-gen.update-strategy: latest
     argocd-image-updater.argoproj.io/write-back-method: git
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/rielu-s-infra/rielu-links.git' # ←ここを書き換え
+    repoURL: 'https://github.com/rielu-s-infra/rielu-gen.git' # ←ここを書き換え
     targetRevision: main
     path: 'argoCD' # ←ここを書き換え
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: rielu-links # ←デプロイ先のNamespace
+    namespace: rielu-gen # ←デプロイ先のNamespace
   syncPolicy:
     automated:
       prune: true
