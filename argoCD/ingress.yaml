@@ -20,7 +20,7 @@ spec:
               service:
                 name: rielu-site
                 port:
-                  number: 3000
+                  number: 31513
   tls:
     - hosts:
         - rieluofficial.uniproject.jp
