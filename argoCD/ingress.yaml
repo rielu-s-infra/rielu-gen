@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: rielu-site
-  namespace: rielu-site
+  name: rielu-links
+  namespace: rielu-links
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     # 以下の2行を追加
@@ -11,17 +11,17 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: rieluofficial.uniproject.jp
+    - host: rielulinks.uniproject.jp
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: rielu-site
+                name: rielu-links
                 port:
                   number: 3000
   tls:
     - hosts:
         - rieluofficial.uniproject.jp
-      secretName: rieluofficial-uniproject-jp-tls
+      secretName: rielulinks-uniproject-jp-tls
