@@ -59,50 +59,31 @@ RUN bun run build
 
 FROM oven/bun:1 AS runner
 
-# Set working directory
+# 作業ディレクトリを /app に固定
 WORKDIR /app
 
-# Set production environment variables
+# 環境変数の設定
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=::
 ENV HOSTNAME="::"
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the run time.
-# ENV NEXT_TELEMETRY_DISABLED=1
+# 1. standalone の「中身」を /app 直下にコピー
+# (これによって /app/server.js が配置されます)
+COPY --from=builder --chown=bun:bun /app/.next/standalone ./
 
-# Copy production assets into standalone runtime directory
-COPY --from=builder --chown=bun:bun /app/public ./standalone/public
+# 2. public フォルダを /app/public にコピー
+# (server.js と同じ階層にある必要があります)
+COPY --from=builder --chown=bun:bun /app/public ./public
 
-# Set the correct permission for standalone runtime
-RUN mkdir -p ./standalone/.next
-RUN chown -R bun:bun ./standalone
+# 3. static フォルダを /app/.next/static にコピー
+COPY --from=builder --chown=bun:bun /app/.next/static ./.next/static
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=bun:bun /app/.next/standalone ./standalone
-COPY --from=builder --chown=bun:bun /app/.next/static ./standalone/.next/static
-
-# If you want to persist the fetch cache generated during the build so that
-# cached responses are available immediately on startup, uncomment this line:
-# COPY --from=builder --chown=bun:bun /app/.next/cache ./standalone/.next/cache
-
-# Copy the Prisma schema to migrate
-# COPY --from=builder --chown=bun:bun /app/prisma ./prisma
-# COPY --from=builder --chown=bun:bun /app/prisma.config.ts ./prisma.config.ts
-# RUN bun add prisma
-# RUN chmod -R 777 /app/node_modules
-
-# Switch to non-root user for security best practices
+# ユーザー切り替え
 USER bun
 
-# Expose port 3000 to allow HTTP traffic
+# ポート開放
 EXPOSE 3000
 
-WORKDIR /app/standalone
-
-# Start Next.js standalone server with Bun
-# CMD ["sh", "-c", "bun x prisma migrate deploy && bun server.js"]
+# server.js は /app 直下にあるので、そのまま実行
 CMD ["bun", "server.js"]
