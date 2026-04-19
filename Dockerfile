@@ -73,21 +73,21 @@ ENV HOSTNAME="::"
 # Uncomment the following line in case you want to disable telemetry during the run time.
 # ENV NEXT_TELEMETRY_DISABLED=1
 
-# Copy production assets
-COPY --from=builder --chown=bun:bun /app/public ./public
+# Copy production assets into standalone runtime directory
+COPY --from=builder --chown=bun:bun /app/public ./standalone/public
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown bun:bun .next
+# Set the correct permission for standalone runtime
+RUN mkdir -p ./standalone/.next
+RUN chown -R bun:bun ./standalone
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=bun:bun /app/.next/standalone ./
-COPY --from=builder --chown=bun:bun /app/.next/static ./.next/static
+COPY --from=builder --chown=bun:bun /app/.next/standalone ./standalone
+COPY --from=builder --chown=bun:bun /app/.next/static ./standalone/.next/static
 
 # If you want to persist the fetch cache generated during the build so that
 # cached responses are available immediately on startup, uncomment this line:
-# COPY --from=builder --chown=bun:bun /app/.next/cache ./.next/cache
+# COPY --from=builder --chown=bun:bun /app/.next/cache ./standalone/.next/cache
 
 # Copy the Prisma schema to migrate
 # COPY --from=builder --chown=bun:bun /app/prisma ./prisma
@@ -101,6 +101,8 @@ USER bun
 # Expose port 3000 to allow HTTP traffic
 EXPOSE 3000
 
+WORKDIR /app/standalone
+
 # Start Next.js standalone server with Bun
 # CMD ["sh", "-c", "bun x prisma migrate deploy && bun server.js"]
-CMD ["sh", "-c", "bun server.js"]
+CMD ["bun", "server.js"]
