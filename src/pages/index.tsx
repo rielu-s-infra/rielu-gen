@@ -1,154 +1,163 @@
-import React, { useState, useEffect } from "react";
 import Head from "next/head";
-
-type LinkItem = {
-  href: string;
-  label: string;
-  featured?: boolean;
-};
-
-const links: LinkItem[] = [
-  { href: "https://twitter.com/nameko_simakaze", label: "Twitter (X)" },
-  { href: "https://rielu.uniproject.jp", label: "プロフィールサイト", featured: true },
-  { href: "https://qiita.com/aki-akatuki-namonakiheimin", label: "Qiita" },
-  { href: "https://rielurandom.uniproject.jp", label: "ランダム数値ジェネレータ", featured: true },
-  { href: "https://github.com/penti-nameko", label: "GitHub" },
-  { href: "https://uniproject.jp", label: "Uniproject", featured: true },
-];
+import React from "react";
 
 export default function Home() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  // ハイドレーションエラー防止
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
-  // スタイル定義
-  const styles: Record<string, React.CSSProperties> = {
-    page: {
-      backgroundColor: "#f8f9fa",
-      minHeight: "100vh",
-      width: "100%",
-      margin: 0,
-      padding: "40px 20px",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "flex-start",
-      fontFamily: "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif",
-      boxSizing: "border-box",
-    },
-    container: {
-      width: "100%",
-      maxWidth: "480px", // ここがボタンの最大幅になります
-      textAlign: "center",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    profileImg: {
-      width: "200px",
-      height: "200px",
-      borderRadius: "50%",
-      marginBottom: "20px",
-      objectFit: "cover",
-      boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-    },
-    heading: {
-      fontSize: "1.5rem",
-      fontWeight: "bold",
-      margin: "0 0 8px 0",
-      color: "#333",
-    },
-    bio: {
-      fontSize: "0.95rem",
-      color: "#666",
-      margin: "0 0 32px 0",
-    },
-    linkList: {
-      width: "100%", // コンテナいっぱいに広げる
-      display: "flex",
-      flexDirection: "column",
-      gap: "16px",
-    },
-    footer: {
-      marginTop: "48px",
-      fontSize: "0.8rem",
-      color: "#aaa",
-    }
-  };
-
-  const getLinkStyle = (link: LinkItem, index: number): React.CSSProperties => {
-    const isHovered = hoveredIndex === index;
-    
-    const baseStyle: React.CSSProperties = {
-      display: "block",
-      width: "100%", // ボタンを横いっぱいに広げる
-      padding: "18px 24px", // 上下を少し厚くして「広さ」を演出
-      borderRadius: "14px",
-      textDecoration: "none",
-      fontWeight: "bold",
-      fontSize: "1rem",
-      transition: "all 0.25s ease-in-out",
-      boxSizing: "border-box", // パディングを含めて100%にする
-      textAlign: "center",
-      boxShadow: isHovered ? "0 6px 15px rgba(0,0,0,0.12)" : "0 2px 5px rgba(0,0,0,0.05)",
-      transform: isHovered ? "translateY(-3px)" : "translateY(0)",
-    };
-
-    if (link.featured) {
-      return {
-        ...baseStyle,
-        backgroundColor: isHovered ? "#0056b3" : "#f5deb3",
-        color: "#ffffff",
-        border: "none",
-      };
-    } else {
-      return {
-        ...baseStyle,
-        backgroundColor: isHovered ? "#333" : "#ffffff",
-        color: isHovered ? "#fff" : "#333",
-        border: "1px solid #e0e0e0",
-      };
-    }
-  };
+  const links = [
+    { href: "https://twitter.com/nameko_simakaze", label: "Twitter (X)", featured: false },
+    { href: "https://rielu.uniproject.jp", label: "プロフィールサイト", featured: true },
+    { href: "https://qiita.com/aki-akatuki-namonakiheimin", label: "Qiita", featured: false },
+    { href: "https://rielurandom.uniproject.jp", label: "ランダム数値ジェネレータ", featured: true },
+    { href: "https://github.com/penti-nameko", label: "GitHub", featured: false },
+    { href: "https://uniproject.jp", label: "Uniproject", featured: true },
+  ];
 
   return (
-    <div style={styles.page}>
+    <>
       <Head>
         <title>りえるのリンクまとめ</title>
+        <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+        <style>{`
+          :root {
+            --bg-color: #f8f9fa;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --white: #ffffff;
+            --primary: #0056b3;
+            --featured: #f5deb3;
+            --border: #e0e0e0;
+            --shadow: rgba(0, 0, 0, 0.05);
+            --shadow-hover: rgba(0, 0, 0, 0.1);
+          }
+
+          body {
+            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1.6;
+          }
+
+          .wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 60px 20px;
+            box-sizing: border-box;
+          }
+
+          .container {
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+          }
+
+          .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px var(--shadow);
+          }
+
+          h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+          }
+
+          .bio {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+          }
+
+          .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+          }
+
+          .link-item {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            box-sizing: border-box;
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px var(--shadow);
+          }
+
+          .link-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px var(--shadow-hover);
+            background-color: #333;
+            color: var(--white);
+          }
+
+          /* Featured Link (小麦色) */
+          .link-item.featured {
+            background-color: var(--featured);
+            color: var(--white);
+            border: none;
+          }
+
+          .link-item.featured:hover {
+            background-color: var(--primary);
+          }
+
+          footer {
+            margin-top: 60px;
+            font-size: 0.85rem;
+            color: #aaa;
+          }
+
+          @media (max-width: 500px) {
+            .wrapper {
+              padding: 40px 15px;
+            }
+          }
+        `}</style>
       </Head>
 
-      <div style={styles.container}>
-        <img src="/profile.png" alt="profile" style={styles.profileImg} />
-        
-        <h1 style={styles.heading}>りえるのいろいろ</h1>
-        <p style={styles.bio}>作ってきたサイトとか</p>
+      <div className="wrapper">
+        <main className="container">
+          <img src="profile.png" alt="rielu" className="profile-img" />
+          
+          <h1>りえるのいろいろ</h1>
+          <p className="bio">作ってきたサイトとか</p>
 
-        <nav style={styles.linkList}>
-          {links.map((link, index) => (
-            <a
-              key={index}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={getLinkStyle(link, index)}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
+          <nav className="link-list">
+            {links.map((link, index) => (
+              <a
+                key={index}
+                href={link.href}
+                className={`link-item ${link.featured ? "featured" : ""}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
 
-        <footer style={styles.footer}>
-          &copy; 2026 rielu All rights reserved.
-        </footer>
+          <footer>
+            &copy; 2026 rielu All rights reserved.
+          </footer>
+        </main>
       </div>
-    </div>
+    </>
   );
 }
