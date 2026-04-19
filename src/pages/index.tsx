@@ -1,63 +1,138 @@
-import React from 'react';
-import Head from 'next/head';
+import { useState } from "react";
 
-const LinkTree = () => {
-  const links = [
-    { name: 'Twitter (X)', url: 'https://twitter.com/nameko_simakaze', featured: false },
-    { name: 'プロフィールサイト', url: 'https://rielu.uniproject.jp', featured: true },
-    { name: 'qiita', url: 'https://qiita.com/aki-akatuki-namonakiheimin', featured: false },
-    { name: 'ランダム数値ジェネレータ', url: 'https://rielurandom.uniproject.jp', featured: true },
-    { name: 'Github', url: 'https://github.com/penti-nameko', featured: false },
-    { name: 'Uniproject', url: 'https://uniproject.jp', featured: true },
-  ];
+type LinkItem = {
+  href: string;
+  label: string;
+  featured?: boolean;
+};
+
+const links: LinkItem[] = [
+  { href: "https://twitter.com/nameko_simakaze", label: "Twitter (X)" },
+  { href: "https://rielu.uniproject.jp", label: "プロフィールサイト", featured: true },
+  { href: "https://qiita.com/aki-akatuki-namonakiheimin", label: "Qiita" },
+  { href: "https://rielurandom.uniproject.jp", label: "ランダム数値ジェネレータ", featured: true },
+  { href: "https://github.com/penti-nameko", label: "GitHub" },
+  { href: "https://uniproject.jp", label: "Uniproject", featured: true },
+];
+
+export default function RieluLinks() {
+  const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-[#333] flex justify-center items-start py-10 px-5 font-sans">
-      <Head>
-        <title>りえるのリンクまとめ</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </Head>
+    <div style={styles.page}>
+      <div style={styles.container}>
+        {/* プロフィール */}
+        <img
+          src="profile.png"
+          alt="プロフィール画像"
+          style={styles.profileImg}
+        />
+        <h1 style={styles.heading}>りえるのいろいろ</h1>
+        <p style={styles.bio}>作ってきたサイトとか</p>
 
-      <div className="w-full max-w-[480px] text-center">
-        {/* プロフィール部分 */}
-        <div className="flex justify-center mb-4">
-          <img
-            src="profile.png"
-            alt="profile"
-            className="w-[200px] h-auto rounded-full object-cover"
-          />
-        </div>
-        
-        <h1 className="text-[1.25rem] font-bold mb-2">りえるのいろいろ</h1>
-        <p className="text-[0.9rem] text-[#666] mb-8">作ってきたサイトとか</p>
-
-        {/* リンクボタンのリスト */}
-        <div className="flex flex-col gap-4">
-          {links.map((link, index) => (
+        {/* リンク一覧 */}
+        <div style={styles.linkList}>
+          {links.map((link, i) => (
             <a
-              key={index}
-              href={link.url}
+              key={i}
+              href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`
-                block p-4 rounded-xl font-bold transition-all duration-300 shadow-sm border
-                ${link.featured 
-                  ? 'bg-[#f5deb3] text-white border-none hover:bg-[#0056b3] hover:-translate-y-0.5 hover:shadow-lg' 
-                  : 'bg-white border-[#e0e0e0] text-[#333] hover:bg-[#333] hover:text-white hover:-translate-y-0.5 hover:shadow-lg'
-                }
-              `}
+              style={{
+                ...styles.linkItem,
+                ...(link.featured ? styles.featured : {}),
+                ...(hovered === i
+                  ? link.featured
+                    ? styles.featuredHover
+                    : styles.linkItemHover
+                  : {}),
+              }}
+              onMouseEnter={() => setHovered(i)}
+              onMouseLeave={() => setHovered(null)}
             >
-              {link.name}
+              {link.label}
             </a>
           ))}
         </div>
 
-        <footer className="mt-12 text-[0.8rem] text-[#aaa]">
+        <footer style={styles.footer}>
           &copy; 2026 rielu All rights reserved.
         </footer>
       </div>
     </div>
   );
-};
+}
 
-export default LinkTree;
+const styles: Record<string, React.CSSProperties> = {
+  page: {
+    fontFamily: "'Helvetica Neue', Arial, sans-serif",
+    backgroundColor: "#f8f9fa",
+    color: "#333",
+    margin: 0,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    minHeight: "100vh",
+    padding: "40px 20px",
+    boxSizing: "border-box",
+  },
+  container: {
+    width: "100%",
+    maxWidth: 480,
+    textAlign: "center",
+  },
+  profileImg: {
+    width: 200,
+    height: "auto",
+    borderRadius: "50%",
+    marginBottom: 16,
+    objectFit: "cover",
+  },
+  heading: {
+    fontSize: "1.25rem",
+    marginBottom: 8,
+  },
+  bio: {
+    fontSize: "0.9rem",
+    color: "#666",
+    marginBottom: 32,
+  },
+  linkList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 16,
+  },
+  linkItem: {
+    display: "block",
+    padding: 16,
+    backgroundColor: "#ffffff",
+    border: "1px solid #e0e0e0",
+    borderRadius: 12,
+    textDecoration: "none",
+    color: "#333",
+    fontWeight: "bold",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+    transition: "all 0.3s ease",
+  },
+  linkItemHover: {
+    backgroundColor: "#333",
+    color: "#fff",
+    transform: "translateY(-2px)",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+  },
+  featured: {
+    backgroundColor: "#f5deb3",
+    color: "#fff",
+    border: "none",
+  },
+  featuredHover: {
+    backgroundColor: "#0056b3",
+    transform: "translateY(-2px)",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+  },
+  footer: {
+    marginTop: 48,
+    fontSize: "0.8rem",
+    color: "#aaa",
+  },
+};
