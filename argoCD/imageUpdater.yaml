@@ -11,9 +11,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/あなたのユーザー名/リポジトリ名.git' # ←ここを書き換え
-    targetRevision: HEAD
-    path: 'マニフェストがあるディレクトリ' # ←ここを書き換え
+    repoURL: 'https://github.com/rielu-s-infra/rielu-site.git' # ←ここを書き換え
+    targetRevision: main
+    path: 'argoCD' # ←ここを書き換え
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: rielu-site # ←デプロイ先のNamespace
