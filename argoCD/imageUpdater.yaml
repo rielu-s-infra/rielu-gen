@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
   annotations:
     # Image Updaterの設定（注釈として記述）
-    argocd-image-updater.argoproj.io/image-list: rielu-site=docker.io/rieluinfra/rielu-site
+    argocd-image-updater.argoproj.io/image-list: rielu-site=docker.io/rieluinfra/rielu-links
     argocd-image-updater.argoproj.io/rielu-links.update-strategy: semver
     argocd-image-updater.argoproj.io/write-back-method: git
 spec:
