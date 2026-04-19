@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rielu-links
-  namespace: rielu-links
+  name: rielu-gen
+  namespace: rielu-gen
 spec:
   selector:
     matchLabels:
-      app: rielu-links
+      app: rielu-gen
   replicas: 1
   template:
     metadata:
       labels:
-        app: rielu-links
+        app: rielu-gen
     spec:
       containers:
         - name: app
-          image: docker.io/rieluinfra/rielu-links:latest
+          image: docker.io/rieluinfra/rielu-gen:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
