@@ -8,7 +8,7 @@ spec:
     method: "git"
     gitConfig:
       repository: "https://github.com/rielu-s-infra/rielu-gen.git"
-      branch: "master"
+      branch: "main"
       writeBackTarget: "helmvalues:./argoCD/values.yaml"
   applicationRefs:
     - namePattern: "rielu-gen"
