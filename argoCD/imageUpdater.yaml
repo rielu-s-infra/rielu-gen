@@ -1,23 +1,19 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
 metadata:
-  name: rielu-gen
+  name: rielu-gen-updater
   namespace: argocd
-  annotations:
-    # Image Updaterの設定（注釈として記述）
-    argocd-image-updater.argoproj.io/image-list: app=docker.io/rieluinfra/rielu-gen
-    argocd-image-updater.argoproj.io/rielu-gen.update-strategy: latest
-    argocd-image-updater.argoproj.io/write-back-method: git
 spec:
-  project: default
-  source:
-    repoURL: 'https://github.com/rielu-s-infra/rielu-gen.git' # ←ここを書き換え
-    targetRevision: main
-    path: 'argoCD' # ←ここを書き換え
-  destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: rielu-gen # ←デプロイ先のNamespace
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+  writeBackConfig:
+    method: "git"
+    gitConfig:
+      repository: "https://github.com/rielu-s-infra/rielu-gen.git"
+      branch: "master"
+      writeBackTarget: "helmvalues:./argoCD/values.yaml"
+  applicationRefs:
+    - namePattern: "rielu-gen"
+      images:
+        - alias: "app"
+          imageName: "docker.io/rieluinfra/rielu-gen"
+          commonUpdateSettings:
+            updateStrategy: "latest"
