@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: rielugen.uniproject.jp
+    - host: genarator.reeldev.jp
       http:
         paths:
           - path: /
@@ -23,5 +23,5 @@ spec:
                   number: 3000
   tls:
     - hosts:
-        - rielugen.uniproject.jp
-      secretName: rielugen-uniproject-jp-tls
+        - generator.reeldev.jp
+      secretName: genarator-reeldev-jp-tls
