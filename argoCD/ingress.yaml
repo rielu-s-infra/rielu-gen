@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: genarator.reeldev.jp
+    - host: generator.reeldev.jp
       http:
         paths:
           - path: /
@@ -24,4 +24,4 @@ spec:
   tls:
     - hosts:
         - generator.reeldev.jp
-      secretName: genarator-reeldev-jp-tls
+      secretName: generator-reeldev-jp-tls
